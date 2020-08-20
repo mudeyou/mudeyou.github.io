@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="盒模型基础 盒子模型的重要性盒子模型是CSS中最重要的知识点之一，它是一个非常重要的知识点，如果没有理解好盒子模型的概念，那么在以后的网页设计开发中没有办法布局出一个优美的网页，它是你接下来学习布局的基础。 什么是盒模型盒模型是CSS中的一个概念,每个元素在页面中都会生成一个矩形的空间，这个矩形的空间就叫做盒子。盒子可以分为两种：一种是行盒，一种是块盒。  行盒：display属性为inline的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端CSS基础——盒子模型">
+<meta property="og:url" content="http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="木的又">
+<meta property="og:description" content="盒模型基础 盒子模型的重要性盒子模型是CSS中最重要的知识点之一，它是一个非常重要的知识点，如果没有理解好盒子模型的概念，那么在以后的网页设计开发中没有办法布局出一个优美的网页，它是你接下来学习布局的基础。 什么是盒模型盒模型是CSS中的一个概念,每个元素在页面中都会生成一个矩形的空间，这个矩形的空间就叫做盒子。盒子可以分为两种：一种是行盒，一种是块盒。  行盒：display属性为inline的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200408160414934.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200408163149440.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200408171808952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200408172016448.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200408172313284.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200408172458723.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020040817402849.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200408174257936.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200408174352947.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200408174514144.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200408174612306.png">
+<meta property="article:published_time" content="2020-08-20T11:02:21.979Z">
+<meta property="article:modified_time" content="2020-08-20T11:02:21.979Z">
+<meta property="article:author" content="木又">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200408160414934.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70#pic_center">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>前端CSS基础——盒子模型</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/projects_url">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E6%B5%AE%E5%8A%A8%E5%B8%83%E5%B1%80%E4%B8%8E%E9%AB%98%E5%BA%A6%E5%9D%8D%E5%A1%8C/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E8%A1%8C%E7%9B%92%E6%A8%A1%E5%9E%8B%E4%B8%8E%E8%A1%8C%E5%9D%97%E7%9B%92%E6%A8%A1%E5%9E%8B/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&text=前端CSS基础——盒子模型"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&title=前端CSS基础——盒子模型"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&is_video=false&description=前端CSS基础——盒子模型"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=前端CSS基础——盒子模型&body=Check out this article: http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&title=前端CSS基础——盒子模型"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&title=前端CSS基础——盒子模型"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&title=前端CSS基础——盒子模型"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&title=前端CSS基础——盒子模型"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&name=前端CSS基础——盒子模型&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&t=前端CSS基础——盒子模型"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">盒子模型的重要性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%9B%92%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">什么是盒模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%92%E5%AD%90%E7%9A%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86"><span class="toc-number">3.</span> <span class="toc-text">盒子的组成部分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%86%85%E5%AE%B9"><span class="toc-number">3.1.</span> <span class="toc-text">1.内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%86%85%E8%BE%B9%E8%B7%9D"><span class="toc-number">3.2.</span> <span class="toc-text">2.内边距</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E8%BE%B9%E6%A1%86"><span class="toc-number">3.3.</span> <span class="toc-text">3.边框</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%A4%96%E8%BE%B9%E8%B7%9D"><span class="toc-number">3.4.</span> <span class="toc-text">4.外边距</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="toc-number">4.</span> <span class="toc-text">开发实用技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%EF%BC%89div%E7%9A%84%E5%AE%BD%E9%AB%98%E9%97%AE%E9%A2%98"><span class="toc-number">4.1.</span> <span class="toc-text">1）div的宽高问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%EF%BC%89%E8%83%8C%E6%99%AF%E7%9A%84%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98"><span class="toc-number">4.2.</span> <span class="toc-text">2）背景的覆盖问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%EF%BC%89%E6%BA%A2%E5%87%BA%E5%A4%84%E7%90%86"><span class="toc-number">4.3.</span> <span class="toc-text">3）溢出处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%EF%BC%89%E6%BA%A2%E5%87%BA%E5%A4%84%E7%90%86%E7%9A%84%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8"><span class="toc-number">4.4.</span> <span class="toc-text">4）溢出处理的简单应用</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        前端CSS基础——盒子模型
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">木的又</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-08-20T11:02:21.979Z" itemprop="datePublished">2020-08-20</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>盒模型基础</p>
+<h3 id="盒子模型的重要性"><a href="#盒子模型的重要性" class="headerlink" title="盒子模型的重要性"></a>盒子模型的重要性</h3><p>盒子模型是CSS中最重要的知识点之一，它是一个非常重要的知识点，如果没有理解好盒子模型的概念，那么在以后的网页设计开发中没有办法布局出一个优美的网页，它是你接下来学习布局的基础。</p>
+<h3 id="什么是盒模型"><a href="#什么是盒模型" class="headerlink" title="什么是盒模型"></a>什么是盒模型</h3><p>盒模型是CSS中的一个概念,每个元素在页面中都会生成一个矩形的空间，这个矩形的空间就叫做盒子。盒子可以分为两种：一种是<strong>行盒</strong>，一种是<strong>块盒</strong>。</p>
+<ul>
+<li>行盒：display属性为inline的元素。</li>
+<li>块盒：display属性为block的元素。</li>
+</ul>
+<p>行盒在页面显示中不换行，类似于行级元素（span、a、img、video、audio等）<br>块盒在页面显示中独占一行，类似于块级元素（div、h1~h6、p等）</p>
+<h3 id="盒子的组成部分"><a href="#盒子的组成部分" class="headerlink" title="盒子的组成部分"></a>盒子的组成部分</h3><p><img src="https://img-blog.csdnimg.cn/20200408160414934.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h4 id="1-内容"><a href="#1-内容" class="headerlink" title="1.内容"></a>1.内容</h4><ul>
+<li><p>content部分为盒子的内容部分，它的属性有width、height，用于定义内容部分的宽高。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">width：<span class="number">10</span>px;</span><br><span class="line">height：<span class="number">10</span>px;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>只包含content部分的叫做盒子的<strong>内容盒：ontent-box</strong></p>
+</li>
+</ul>
+<h4 id="2-内边距"><a href="#2-内边距" class="headerlink" title="2.内边距"></a>2.内边距</h4><ul>
+<li><p>padding为内边距，表示内容部分离边框的距离，它有四个属性：padding-left(左边距)、padding-right(右边距)、padding-top(上边距)、padding-bottom(下边距)，也可以简写成：padding</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">padding-top:<span class="number">10</span>px;</span><br><span class="line">padding-right:<span class="number">10</span>px;</span><br><span class="line">padding-bottom:<span class="number">10</span>px;</span><br><span class="line">padding-left:<span class="number">10</span>px;</span><br></pre></td></tr></table></figure>
+
+<p>等于</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">padding:<span class="number">10</span>px;（上 右 下 左）</span><br></pre></td></tr></table></figure>
+
+<p>等于</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">padding:<span class="number">10</span>px <span class="number">10</span>px;(上下 右左)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>包含内容（content）跟内边距（padding）的部分称为盒子的<strong>填充盒：padding-box</strong><h4 id="3-边框"><a href="#3-边框" class="headerlink" title="3.边框"></a>3.边框</h4><ul>
+<li>border表示边框，即图中padding周围的黑色部分，它有三个属性：border-style（边框样式，即实线还是虚线等）、border-width（边框宽度）、border-color（边框颜色）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">border-width:<span class="number">1</span>px（宽度为<span class="number">1</span>px）</span><br><span class="line">border-style:solid（实线）</span><br><span class="line">border-color:red（红色）</span><br><span class="line">也可简写成</span><br><span class="line">border:<span class="number">1</span>px solid red</span><br></pre></td></tr></table></figure>
+<ul>
+<li>包含内容（content）、内边距（padding）和边框（border）的部分称为<strong>边框盒：border-box</strong></li>
+</ul>
+<h4 id="4-外边距"><a href="#4-外边距" class="headerlink" title="4.外边距"></a>4.外边距</h4><ul>
+<li>margin为外边距，表示边框盒与其他盒子之间的距离，它有四个属性：margin-left(左边距)、margin-right(右边距)、margin-top(上边距)、margin-bottom(下边距)，也可以简写成：margin</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">margin-top:<span class="number">10</span>px;</span><br><span class="line">margin-right:<span class="number">10</span>px;</span><br><span class="line">margin-bottom:<span class="number">10</span>px;</span><br><span class="line">margin-left:<span class="number">10</span>px;</span><br></pre></td></tr></table></figure>
+
+<p>   等于</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">margin:<span class="number">10</span>px;（上 右 下 左）</span><br></pre></td></tr></table></figure>
+<p>等于</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">margin:<span class="number">10</span>px <span class="number">10</span>px;(上下 右左)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200408163149440.png#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="开发实用技巧"><a href="#开发实用技巧" class="headerlink" title="开发实用技巧"></a>开发实用技巧</h3><h4 id="1）div的宽高问题"><a href="#1）div的宽高问题" class="headerlink" title="1）div的宽高问题"></a>1）div的宽高问题</h4><p> 当你想定义一个宽为100px，高为30px的div时，你会用<code>width：100px;  height:30px;</code>定义一个符合要求的div，这没问题，页面显示的也确实是宽高为<strong>100px</strong>和<strong>30px</strong>的div，但是当你添加一个边框或者内边距时，整体的div宽高都会发生变化，比如添加一个宽度为1px的边框<code>border-width:1px</code>时或者添加一个内边距<strong>10px</strong> <code>padding-left:10px</code>时，你的div宽高不再是<strong>100px</strong>、<strong>30px</strong>，而是<strong>102px</strong>,<strong>32px</strong>或者<strong>110px</strong>,<strong>30px</strong>,这是为什么呢，因为一开始width跟height定义的是内容content的宽高而不是div的宽高，所以加入其他宽度的时候div自然会发生变化，那么该如何解决呢，这里引入一个CSS3的属性： box-sizing，可以有效解决上面的问题。<br><code>box-sizing：border-box（表示width、height指定边框盒）</code></p>
+<h4 id="2）背景的覆盖问题"><a href="#2）背景的覆盖问题" class="headerlink" title="2）背景的覆盖问题"></a>2）背景的覆盖问题</h4><p>在默认情况下，元素的默认背景覆盖范围为边框盒，当你不想要元素的背景覆盖边框或者内边距时，可以使用属性<strong>background-clip</strong>修改背景的覆盖范围</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">background-clip：border-box（默认值）</span><br><span class="line">background-clip：content-box（内容盒）</span><br><span class="line">background-clip：padding-box（填充盒）</span><br></pre></td></tr></table></figure>
+
+<h4 id="3）溢出处理"><a href="#3）溢出处理" class="headerlink" title="3）溢出处理"></a>3）溢出处理</h4><p>当你定义的div里面的内容超出div设置的宽高时，内容就会溢出，显示出的内容就会很难看<br><img src="https://img-blog.csdnimg.cn/20200408171808952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>这时候可以引入属性<strong>overflow</strong>处理</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">overflow:hidden（隐藏溢出部分）;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200408172016448.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">overflow:scroll（包含overflow-x：scroll和overflow-y：scroll,表示在x、y方向生成滚动条，也可单独只在x、y方向生成滚动条）</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200408172313284.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">overflow:auto（最常用，当内容溢出的时候生成滚动条）</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200408172458723.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="4）溢出处理的简单应用"><a href="#4）溢出处理的简单应用" class="headerlink" title="4）溢出处理的简单应用"></a>4）溢出处理的简单应用</h4><p><img src="https://img-blog.csdnimg.cn/2020040817402849.png#pic_center" alt="在这里插入图片描述"><br>上图所示的图片表示当文本溢出的时候不显示溢出部分，只显示三个点…<br>该如何实现这个功能呢<br>定义一个无序列表，显示样式<br><img src="https://img-blog.csdnimg.cn/20200408174257936.png" alt="在这里插入图片描述"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">white-space: nowrap;（表示不换行）</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200408174352947.png" alt="在这里插入图片描述"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">overflow: hidden;（溢出部分隐藏）</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200408174514144.png" alt="在这里插入图片描述"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text-overflow: ellipsis;（将溢出的内容显示三个点）</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200408174612306.png" alt="在这里插入图片描述"><br>OK，该功能就完成了。</p>
+
+  </div>
+  <div style="font-family: 'Menlo', 'Meslo LG', monospace;    font-weight: bold;
+  font-size: 0.9rem;">
+    <a target="_blank" rel="noopener" href="https://github.com/mudeyou/mudeyou.github.io/edit/myblog/source/_posts/前端CSS基础——盒子模型.md">在线编辑</a>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/projects_url">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">盒子模型的重要性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%9B%92%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">什么是盒模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%92%E5%AD%90%E7%9A%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86"><span class="toc-number">3.</span> <span class="toc-text">盒子的组成部分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%86%85%E5%AE%B9"><span class="toc-number">3.1.</span> <span class="toc-text">1.内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%86%85%E8%BE%B9%E8%B7%9D"><span class="toc-number">3.2.</span> <span class="toc-text">2.内边距</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E8%BE%B9%E6%A1%86"><span class="toc-number">3.3.</span> <span class="toc-text">3.边框</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%A4%96%E8%BE%B9%E8%B7%9D"><span class="toc-number">3.4.</span> <span class="toc-text">4.外边距</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="toc-number">4.</span> <span class="toc-text">开发实用技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%EF%BC%89div%E7%9A%84%E5%AE%BD%E9%AB%98%E9%97%AE%E9%A2%98"><span class="toc-number">4.1.</span> <span class="toc-text">1）div的宽高问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%EF%BC%89%E8%83%8C%E6%99%AF%E7%9A%84%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98"><span class="toc-number">4.2.</span> <span class="toc-text">2）背景的覆盖问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%EF%BC%89%E6%BA%A2%E5%87%BA%E5%A4%84%E7%90%86"><span class="toc-number">4.3.</span> <span class="toc-text">3）溢出处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%EF%BC%89%E6%BA%A2%E5%87%BA%E5%A4%84%E7%90%86%E7%9A%84%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8"><span class="toc-number">4.4.</span> <span class="toc-text">4）溢出处理的简单应用</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&text=前端CSS基础——盒子模型"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&title=前端CSS基础——盒子模型"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&is_video=false&description=前端CSS基础——盒子模型"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=前端CSS基础——盒子模型&body=Check out this article: http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&title=前端CSS基础——盒子模型"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&title=前端CSS基础——盒子模型"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&title=前端CSS基础——盒子模型"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&title=前端CSS基础——盒子模型"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&name=前端CSS基础——盒子模型&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/&t=前端CSS基础——盒子模型"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2020
+    木又
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/projects_url">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

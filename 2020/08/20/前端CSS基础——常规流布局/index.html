@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="常规流常规流又称为文档流，是页面布局规则之一，所有元素在默认情况下都是常规流布局，它的总体规则是块盒独占一行，行盒水平依次排列。在了解常规流布局前，需要引入一个概念，包含块。  包含块在绝大部分情况下，包含块指父类元素的内容盒content-box,每个盒子都有它的包含块，包含块决定了盒子之间的排列次序.  块盒块盒一般指子元素的整个盒子模型，块盒的总宽度必须刚好等于包含块的宽度。   1234&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端CSS基础——常规流布局">
+<meta property="og:url" content="http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/index.html">
+<meta property="og:site_name" content="木的又">
+<meta property="og:description" content="常规流常规流又称为文档流，是页面布局规则之一，所有元素在默认情况下都是常规流布局，它的总体规则是块盒独占一行，行盒水平依次排列。在了解常规流布局前，需要引入一个概念，包含块。  包含块在绝大部分情况下，包含块指父类元素的内容盒content-box,每个盒子都有它的包含块，包含块决定了盒子之间的排列次序.  块盒块盒一般指子元素的整个盒子模型，块盒的总宽度必须刚好等于包含块的宽度。   1234&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020040921114073.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020040921121755.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-08-20T11:02:21.979Z">
+<meta property="article:modified_time" content="2020-08-20T11:02:21.979Z">
+<meta property="article:author" content="木又">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2020040921114073.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>前端CSS基础——常规流布局</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/projects_url">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E5%B8%83%E5%B1%80/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E6%B5%AE%E5%8A%A8%E5%B8%83%E5%B1%80%E4%B8%8E%E9%AB%98%E5%BA%A6%E5%9D%8D%E5%A1%8C/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&text=前端CSS基础——常规流布局"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&title=前端CSS基础——常规流布局"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&is_video=false&description=前端CSS基础——常规流布局"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=前端CSS基础——常规流布局&body=Check out this article: http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&title=前端CSS基础——常规流布局"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&title=前端CSS基础——常规流布局"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&title=前端CSS基础——常规流布局"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&title=前端CSS基础——常规流布局"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&name=前端CSS基础——常规流布局&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&t=前端CSS基础——常规流布局"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%84%E6%B5%81"><span class="toc-number">1.</span> <span class="toc-text">常规流</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9D%97%E7%9B%92%E7%9A%84%E5%8F%96%E5%80%BC%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">块盒的取值问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E8%BE%B9%E8%B7%9D%E7%9A%84%E5%90%88%E5%B9%B6%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.</span> <span class="toc-text">上下边距的合并问题</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        前端CSS基础——常规流布局
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">木的又</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-08-20T11:02:21.979Z" itemprop="datePublished">2020-08-20</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="常规流"><a href="#常规流" class="headerlink" title="常规流"></a>常规流</h3><p>常规流又称为文档流，是页面布局规则之一，所有元素在默认情况下都是常规流布局，它的总体规则是块盒独占一行，行盒水平依次排列。在了解常规流布局前，需要引入一个概念，<strong>包含块</strong>。</p>
+<ol>
+<li><p><strong>包含块</strong><br>在绝大部分情况下，包含块指父类元素的内容盒<strong>content-box</strong>,每个盒子都有它的包含块，包含块决定了盒子之间的排列次序.</p>
+</li>
+<li><p><strong>块盒</strong><br>块盒一般指子元素的整个盒子模型，块盒的总宽度必须刚好等于包含块的宽度。</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class&#x3D;&quot;father&quot;&gt;&#x2F;&#x2F;content-box为包含块</span><br><span class="line">    &lt;div class&#x3D;&quot;child&quot;&gt;&#x2F;&#x2F;整个盒子模型为块盒</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="块盒的取值问题"><a href="#块盒的取值问题" class="headerlink" title="块盒的取值问题"></a>块盒的取值问题</h4><ol>
+<li>块盒的宽度<br>块盒的宽度取值默认是auto,表示<strong>将剩余空间填充</strong>。例如包含块的宽度为1000px，而块盒的宽度未设定，则块盒的总宽度为1000px。<br>当没有设置宽度时，块盒宽度等于包含块宽度。<br>当设置宽度时，若块盒宽度不等于包含块宽度，则剩下空间由margin-right填充。<br>margin的默认值为0，可以设定为auto。<strong>可以在设定宽度后，将margin的左右值设定为auto实现块盒的居中。</strong></li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">包含块宽度（父类content-box宽度）= 块盒总宽度（块盒margin宽度+块盒border宽度+块盒padding宽度+块盒content宽度）</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>块盒的高度<br>块盒的高度适应于包含块的高度，若包含块没有设定高度，则块盒的高度随内容变化而变化，包含块高度=块盒高度（默认取值auto）</p>
+</li>
+<li><p>百分比取值<br>padding、margin的取值可以设定为百分比取值，但是它们所有百分比都相对于包含块的宽度。例如：</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.father&#123;</span><br><span class="line">    width:<span class="number">100</span>px;</span><br><span class="line">    padding:<span class="number">200</span>px;</span><br><span class="line">    margin:<span class="number">300</span>px;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">    padding:<span class="number">50</span>%;<span class="comment">//等于50px，而不是100px</span></span><br><span class="line">    margin:<span class="number">50</span>%;<span class="comment">//等于50px，而不是150px</span></span><br><span class="line">&#125;</span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>= <span class="string">&quot;father&quot;</span>&gt;</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span> </span>= <span class="string">&quot;child&quot;</span>&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>高度的百分比取值<br>1）当包含块未设置固定高度时，包含块的高度取决于块盒的高度，设置百分比无效<br>2）当包含块设置固定高度时，块盒的高度百分比取决于包含块的高度。</li>
+</ol>
+<h4 id="上下边距的合并问题"><a href="#上下边距的合并问题" class="headerlink" title="上下边距的合并问题"></a>上下边距的合并问题</h4><ol>
+<li>两个常规流块盒，不管是兄弟元素还是父子元素，只要外边距相邻，就会进行合并。<br>例如：</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">.father&#123;</span><br><span class="line">    background:skyblue;<span class="comment">//背景颜色</span></span><br><span class="line">    width:<span class="number">200</span>px;<span class="comment">//宽200px</span></span><br><span class="line">    height:<span class="number">200</span>px;<span class="comment">//高200px</span></span><br><span class="line">    margin-top:<span class="number">30</span>px;<span class="comment">//外边距30px</span></span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">    background:red;<span class="comment">//背景颜色</span></span><br><span class="line">    width:<span class="number">50</span>px;<span class="comment">//宽度</span></span><br><span class="line">    height:<span class="number">30</span>px<span class="comment">//高度</span></span><br><span class="line">    margin-top:<span class="number">30</span>px;<span class="comment">//外边距30px</span></span><br><span class="line">&#125;</span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>= <span class="string">&quot;father&quot;</span>&gt;</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span> </span>= <span class="string">&quot;child&quot;</span>&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>上图代码想表示的结果是父元素上外边距30px，子元素距离父元素上外边距30px，运行的理想效果是这样的：<br><img src="https://img-blog.csdnimg.cn/2020040921114073.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>但实际运行是这样的<br><img src="https://img-blog.csdnimg.cn/2020040921121755.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>这就是因为<strong>father</strong>的<strong>margin-top</strong>与<strong>child</strong>的<strong>margin-top</strong>的外边距相邻导致合并了，这也是我们在开发中经常遇到的问题，那么该如何解决呢，我们只需要在相邻边距中间加个<strong>border</strong>或者将<strong>块盒的margin属性转化成包含块的padding属性</strong>，就可以实现了。</p>
+
+  </div>
+  <div style="font-family: 'Menlo', 'Meslo LG', monospace;    font-weight: bold;
+  font-size: 0.9rem;">
+    <a target="_blank" rel="noopener" href="https://github.com/mudeyou/mudeyou.github.io/edit/myblog/source/_posts/前端CSS基础——常规流布局.md">在线编辑</a>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/projects_url">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%84%E6%B5%81"><span class="toc-number">1.</span> <span class="toc-text">常规流</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9D%97%E7%9B%92%E7%9A%84%E5%8F%96%E5%80%BC%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">块盒的取值问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E8%BE%B9%E8%B7%9D%E7%9A%84%E5%90%88%E5%B9%B6%E9%97%AE%E9%A2%98"><span class="toc-number">1.2.</span> <span class="toc-text">上下边距的合并问题</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&text=前端CSS基础——常规流布局"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&title=前端CSS基础——常规流布局"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&is_video=false&description=前端CSS基础——常规流布局"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=前端CSS基础——常规流布局&body=Check out this article: http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&title=前端CSS基础——常规流布局"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&title=前端CSS基础——常规流布局"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&title=前端CSS基础——常规流布局"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&title=前端CSS基础——常规流布局"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&name=前端CSS基础——常规流布局&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/08/20/%E5%89%8D%E7%AB%AFCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E5%B8%B8%E8%A7%84%E6%B5%81%E5%B8%83%E5%B1%80/&t=前端CSS基础——常规流布局"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2020
+    木又
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/projects_url">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

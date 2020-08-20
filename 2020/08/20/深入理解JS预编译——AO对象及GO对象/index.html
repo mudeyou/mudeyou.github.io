@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="JS预编译JS有两个特性，一个是单线程，一个是解释性语言。不同于编译性语言，解释性语言通常理解为不整体编译，由解释器解释一句执行一句。但JS不是直接对着代码解释执行，在解释执行之前，需要进行其他的步骤。 JS运行步骤：  语法分析 预编译 解释执行  预编译有个特点：任何变量，如果未声明就赋值，那该变量为全局变量，即暗示全局变量（imply global）。并且所有的全局变量都是window的属性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解JS预编译——AO对象及GO对象">
+<meta property="og:url" content="http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/index.html">
+<meta property="og:site_name" content="木的又">
+<meta property="og:description" content="JS预编译JS有两个特性，一个是单线程，一个是解释性语言。不同于编译性语言，解释性语言通常理解为不整体编译，由解释器解释一句执行一句。但JS不是直接对着代码解释执行，在解释执行之前，需要进行其他的步骤。 JS运行步骤：  语法分析 预编译 解释执行  预编译有个特点：任何变量，如果未声明就赋值，那该变量为全局变量，即暗示全局变量（imply global）。并且所有的全局变量都是window的属性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200512211236943.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200512211426264.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200512214510729.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200512222713240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200512224857183.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200512230041294.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-08-20T11:02:21.979Z">
+<meta property="article:modified_time" content="2020-08-20T11:02:21.979Z">
+<meta property="article:author" content="木又">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200512211236943.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>深入理解JS预编译——AO对象及GO对象</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.0.2"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/projects_url">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/08/20/%E5%89%8D%E7%AB%AFHTML%E8%BF%9B%E9%98%B6%E5%92%8CCSS%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%943%E5%88%86%E9%92%9F%E6%8E%8C%E6%8F%A1%E8%A1%A8%E6%A0%BC%E5%85%83%E7%B4%A0%E5%8F%8A%E8%A1%A8%E6%A0%BC%E5%85%83%E7%B4%A0%E7%9A%84%E7%BE%8E%E5%8C%96/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&text=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&title=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&is_video=false&description=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=深入理解JS预编译——AO对象及GO对象&body=Check out this article: http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&title=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&title=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&title=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&title=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&name=深入理解JS预编译——AO对象及GO对象&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&t=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#JS%E9%A2%84%E7%BC%96%E8%AF%91"><span class="toc-number">1.</span> <span class="toc-text">JS预编译</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#AO%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.1.</span> <span class="toc-text">AO对象</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E9%A2%84%E7%BC%96%E8%AF%91%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.1.1.</span> <span class="toc-text">函数预编译步骤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E7%90%86%E8%A7%A3"><span class="toc-number">1.1.2.</span> <span class="toc-text">实战理解</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GO%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.2.</span> <span class="toc-text">GO对象</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91%E4%B8%89%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.1.</span> <span class="toc-text">预编译三步骤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E7%90%86%E8%A7%A3-1"><span class="toc-number">1.2.2.</span> <span class="toc-text">实战理解</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3AO%E3%80%81GO"><span class="toc-number">1.3.</span> <span class="toc-text">实战深入理解AO、GO</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        深入理解JS预编译——AO对象及GO对象
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">木的又</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-08-20T11:02:21.979Z" itemprop="datePublished">2020-08-20</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="JS预编译"><a href="#JS预编译" class="headerlink" title="JS预编译"></a>JS预编译</h3><p>JS有两个特性，一个是单线程，一个是解释性语言。不同于编译性语言，解释性语言通常理解为不整体编译，由解释器解释一句执行一句。但JS不是直接对着代码解释执行，在解释执行之前，需要进行其他的步骤。</p>
+<p>JS运行步骤：</p>
+<ol>
+<li>语法分析</li>
+<li>预编译</li>
+<li>解释执行</li>
+</ol>
+<p>预编译有个特点：<strong>任何变量，如果未声明就赋值，那该变量为全局变量，</strong>即<strong>暗示全局变量（imply global）</strong>。并且所有的全局变量都是window的属性。</p>
+<p>简单看一下预编译例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"></span><br><span class="line">       test();</span><br><span class="line">       <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">           <span class="built_in">console</span>.log(<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       </span><br><span class="line">   &lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>正常来讲，代码执行从上到下，先执行test()，再执行后面的函数声明，所以预期结果应该是不输出a的，但是结果是输出a的。<br><img src="https://img-blog.csdnimg.cn/20200512211236943.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>再看一个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">123</span>;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>a的声明在后，按道理应该报错，因为还没有到a的声明赋值，并不存在a变量，但是运行结果为：undefined<br><img src="https://img-blog.csdnimg.cn/20200512211426264.png" alt="在这里插入图片描述"><br>这就是因为JS在执行前，先进行了预编译。</p>
+<h4 id="AO对象"><a href="#AO对象" class="headerlink" title="AO对象"></a>AO对象</h4><p>AO对象全称为：activation object （活跃对象/执行期上下文），在函数执行前执行函数预编译，此时会产生一个AO对象，AO对象保存该函数的参数变量。</p>
+<h5 id="函数预编译步骤"><a href="#函数预编译步骤" class="headerlink" title="函数预编译步骤"></a>函数预编译步骤</h5><blockquote>
+<ol>
+<li><p>产生AO对象</p>
+</li>
+<li><p>将函数的参数以及函数里面声明的变量当做AO对象的属性名，值全部为undefined。</p>
+</li>
+<li><p>将实参的值赋值给形参。</p>
+</li>
+<li><p>在函数里面声明的函数，函数名作为AO对象的属性名，值赋值给函数体。（若参数名和函数名重叠，则函数体值会覆盖参数值）</p>
+</li>
+</ol>
+</blockquote>
+<h5 id="实战理解"><a href="#实战理解" class="headerlink" title="实战理解"></a>实战理解</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">        <span class="keyword">var</span> a = <span class="number">2</span>;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">a</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">        <span class="keyword">var</span> b = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">        <span class="built_in">console</span>.log(b);</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">d</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    test(<span class="number">1</span>);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>创建AO对象<br>AO{<br>//此时AO对象为空<br>}</li>
+</ol>
+<ol start="2">
+<li><p>确定AO对象的属性名<br>AO{<br> a：undefined;            <strong>//函数参数</strong><br> b：undefined;             <strong>//函数里面声明的变量</strong><br> }</p>
+</li>
+<li><p>将实参值赋值给形参<br>AO{<br>a：1; //函数参数<br>b：undefined; //函数里面声明的变量<br>}</p>
+</li>
+<li><p>处理函数里面的声明函数<br>AO{<br>a：<del>1;</del>  function a () {} //变量名一样，值覆盖<br>b：undefined; //函数里面声明的变量<br>d：function d () {};<br>}</p>
+</li>
+</ol>
+<p>此时函数预编译已经完成的，预编译后执行代码：<br>第一条执行的是控制台打印出a的值，所以输出function a () {}；<br>第二条语句赋值给a，则AO对象中a的值被覆盖为2；<br>第三条语句控制台打印a的值为2；<br>第四条为声明，预编译处理过所以直接跳过；<br>第五条打印出a的值，一样为2；<br>第六条为赋值，赋值b的值为function () {}；<br>第七条打印出b的值function () {}；<br>第八条声明，预编译处理过所以直接跳过；</p>
+<p>所以输出结果应该是<br><strong>function a () {}；<br>2；<br>2；<br>function () {}；</strong><br>执行效果如图：<br><img src="https://img-blog.csdnimg.cn/20200512214510729.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="GO对象"><a href="#GO对象" class="headerlink" title="GO对象"></a>GO对象</h4><p>GO对象全称为 global object（全局对象，等同于window），在开始预编译时产生的对象，比AO对象先产生，用于存放全局变量，也称为全局作用域。</p>
+<h5 id="预编译三步骤"><a href="#预编译三步骤" class="headerlink" title="预编译三步骤"></a>预编译三步骤</h5><blockquote>
+<ol>
+<li>生成GO对象<ol start="2">
+<li>将变量声明的变量名当做GO对象的属性名，值为undefinded</li>
+<li>将声明函数的函数名当做GO对象的属性名，值为函数体</li>
+</ol>
+</li>
+</ol>
+</blockquote>
+<h5 id="实战理解-1"><a href="#实战理解-1" class="headerlink" title="实战理解"></a>实战理解</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  &lt;script&gt;</span><br><span class="line"><span class="built_in">console</span>.log(a);</span><br><span class="line">      <span class="keyword">var</span> a = <span class="number">123</span>;</span><br><span class="line">      <span class="function"><span class="keyword">function</span> <span class="title">a</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">console</span>.log(a);     </span><br><span class="line">  &lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>生成GO对象<br>GO{</p>
+<p>}</p>
+</li>
+<li><p>将声明变量添加进GO对象<br>GO{<br>a：undefined；<br>}</p>
+<ol start="3">
+<li>将声明函数添加进GO对象<br>GO{<br>a：<del>undefined</del> ；function a () {}；//覆盖a的值<br>}</li>
+</ol>
+</li>
+</ol>
+<p>按顺序执行代码<br>第一次输出结果为：function a () {}<br>第二次输出结果为：123</p>
+<p>执行结果<br><img src="https://img-blog.csdnimg.cn/20200512222713240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="实战深入理解AO、GO"><a href="#实战深入理解AO、GO" class="headerlink" title="实战深入理解AO、GO"></a>实战深入理解AO、GO</h4><p>求输出结果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(a);</span><br><span class="line">a = <span class="number">100</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    a = <span class="number">200</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="keyword">var</span> a = b = <span class="number">300</span>;</span><br><span class="line">&#125;   </span><br><span class="line">test();</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="keyword">var</span> a;</span><br><span class="line"><span class="built_in">console</span>.log(a);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>生成GO对象<br>GO{<br>}</p>
+<ol start="2">
+<li><p>将声明变量添加进GO对象内，值为undefined<br>GO{<br>a：undefined；<br>}</p>
+</li>
+<li><p>将声明函数添加进GO对象呢，值为函数体<br>GO{<br>a：undefined；<br>function test() { …… }；<br>}</p>
+</li>
+<li><p>预编译完成，执行代码：输出a，此时a的值为：<strong>undefined</strong></p>
+</li>
+<li><p>a赋值，此时GO对象内的a值变为100<br>GO{<br>a：100；<br>function test() { … }；<br>}</p>
+</li>
+<li><p>执行函数test（），生成AO对象<br>AO{</p>
+</li>
+</ol>
+<p>}</p>
+<ol start="7">
+<li>将函数声明的变量添加进AO对象，值为undefined<br>AO{<br>a：undefined；<br>}</li>
+<li>函数没有传递参数，跳过函数预编译的第三步</li>
+<li>函数里面没有声明函数，跳过函数预编译的第四步</li>
+<li>执行函数，打印a，此时AO里面有属性a，则输出AO里面a的值，即输出： <strong>undefined</strong> </li>
+<li>AO的a赋值200，此时AO的a的值为200<br>AO{<br>a：200；<br>}</li>
+<li>输出a的值：<strong>200</strong></li>
+<li>将300的值赋值给b再赋值给a，此时b未声明，所以b为全局变量，将b添加进GO对象内，将a的值改为300<br>GO{<br>a：100；<br>function test() { … }；<br>b：300；<br>}<br>AO{<br>a：300；<br>}</li>
+<li>输出a的值：<strong>300</strong>，函数执行完成</li>
+<li>输出b的值：<strong>300</strong></li>
+<li>输出a的值，此时a的值为GO里面的值：<strong>100</strong></li>
+</ol>
+</li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/20200512224857183.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>再举个例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//GO&#123;</span></span><br><span class="line"><span class="comment">//生成的GO对象</span></span><br><span class="line"><span class="comment">//a：undefined；</span></span><br><span class="line"><span class="comment">//test：function test()&#123; ... &#125;；</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line">      <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">          <span class="built_in">console</span>.log(b);<span class="comment">//undefined</span></span><br><span class="line">          <span class="keyword">if</span> (a) &#123;<span class="comment">//AO里面没有a的属性，自动寻找GO里面a的属性，此时a的值为undefined，语句不执行</span></span><br><span class="line">              <span class="keyword">var</span> b = <span class="number">50</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="built_in">console</span>.log(b);<span class="comment">//undefined</span></span><br><span class="line">          c = <span class="number">100</span>;<span class="comment">//未声明则为全局变量，添加在GO对象内</span></span><br><span class="line">          <span class="built_in">console</span>.log(c); <span class="comment">//100</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">var</span> a;</span><br><span class="line">      test();<span class="comment">//执行函数预编译</span></span><br><span class="line">      <span class="comment">//AO&#123;</span></span><br><span class="line">      <span class="comment">//生成的AO对象</span></span><br><span class="line"><span class="comment">//b：undefined;</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line">      a = <span class="number">10</span>;<span class="comment">//GO里面的a赋值为10</span></span><br><span class="line">      <span class="built_in">console</span>.log(c);<span class="comment">//100</span></span><br></pre></td></tr></table></figure>
+<p>输出结果为：<br>undefined<br>undefined<br>100<br>100</p>
+<p>执行结果为：<br><img src="https://img-blog.csdnimg.cn/20200512230041294.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDkwOTY4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+
+  </div>
+  <div style="font-family: 'Menlo', 'Meslo LG', monospace;    font-weight: bold;
+  font-size: 0.9rem;">
+    <a target="_blank" rel="noopener" href="https://github.com/mudeyou/mudeyou.github.io/edit/myblog/source/_posts/深入理解JS预编译——AO对象及GO对象.md">在线编辑</a>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/projects_url">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#JS%E9%A2%84%E7%BC%96%E8%AF%91"><span class="toc-number">1.</span> <span class="toc-text">JS预编译</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#AO%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.1.</span> <span class="toc-text">AO对象</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E9%A2%84%E7%BC%96%E8%AF%91%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.1.1.</span> <span class="toc-text">函数预编译步骤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E7%90%86%E8%A7%A3"><span class="toc-number">1.1.2.</span> <span class="toc-text">实战理解</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GO%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.2.</span> <span class="toc-text">GO对象</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%A2%84%E7%BC%96%E8%AF%91%E4%B8%89%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.2.1.</span> <span class="toc-text">预编译三步骤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E7%90%86%E8%A7%A3-1"><span class="toc-number">1.2.2.</span> <span class="toc-text">实战理解</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3AO%E3%80%81GO"><span class="toc-number">1.3.</span> <span class="toc-text">实战深入理解AO、GO</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&text=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&title=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&is_video=false&description=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=深入理解JS预编译——AO对象及GO对象&body=Check out this article: http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&title=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&title=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&title=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&title=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&name=深入理解JS预编译——AO对象及GO对象&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/08/20/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3JS%E9%A2%84%E7%BC%96%E8%AF%91%E2%80%94%E2%80%94AO%E5%AF%B9%E8%B1%A1%E5%8F%8AGO%E5%AF%B9%E8%B1%A1/&t=深入理解JS预编译——AO对象及GO对象"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2020
+    木又
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/projects_url">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
