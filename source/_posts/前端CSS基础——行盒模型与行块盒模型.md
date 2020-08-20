@@ -1,3 +1,6 @@
+---
+title: 前端CSS基础——行盒模型与行块盒模型
+---
 ### 行盒模型
 行盒模型是display属性为inline的元素，常见的行盒元素有a、span、strong、em、video、audio、img等。
 行盒模型与块盒模型的不同特点有：
